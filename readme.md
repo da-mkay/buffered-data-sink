@@ -11,6 +11,8 @@ This is what `BufferedDataSink` allows you to do very easily. It buffers the dat
 The `BufferedDataSink` plays nicely with node's `readline`:
 
     var BufferedDataSink = require('buffered-data-sink')
+      , fs = require('fs')
+      , readline = require('readline')
     
     function onDone() {
       console.log('All data read and inserted!');
@@ -21,7 +23,7 @@ The `BufferedDataSink` plays nicely with node's `readline`:
       // Call clb when done.
     }
 
-    var reader = require('readline').createInterface({ input: fs.createReadStream('some_file')})
+    var reader = readline.createInterface({ input: fs.createReadStream('some_file')})
 
     var sink = new BufferedDataSink(reader, /*bufferSize=*/100000, /*queueLimit*/1, insertIntoDatabase, onDone)
 
