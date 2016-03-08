@@ -1,6 +1,6 @@
 {
   "name": "buffered-data-sink",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A sink that buffers data, queues these buffers and prevents the reader from loading too much data into memory.",
   "main": "buffered_data_sink.js",
   "repository": {
