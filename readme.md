@@ -15,7 +15,7 @@ The `BufferedDataSink` plays nicely with node's `readline`:
       , readline = require('readline')
     
     function onDone() {
-      console.log('All data read and inserted!');
+      console.log('All data read and inserted!')
     }
 
     function insertIntoDatabase(buffer, clb) {
@@ -25,12 +25,12 @@ The `BufferedDataSink` plays nicely with node's `readline`:
 
     var reader = readline.createInterface({ input: fs.createReadStream('some_file')})
 
-    var sink = new BufferedDataSink(reader, /*bufferSize=*/100000, /*queueLimit*/1, insertIntoDatabase, onDone)
+    var sink = new BufferedDataSink(reader, /*bufferSize=*/100000, /*queueLimit=*/1, insertIntoDatabase, onDone)
 
     reader.on('line', function(line) {
       var data = ... // generate some data based on the line
-      sink.push(data);
-    });
+      sink.push(data)
+    })
 
 Here we read `some_file` line by line using node's `readline`. Each line is turned into some data-record that is pushed to the sink. If we have pushed 100000 data-records, the `insertIntoDatabase`-function will be called with the buffer containing all the 100000 data-records. The `reader` continues with reading more lines. After adding another 100000 data-records the `BufferedDataSink` will queue the current buffer (assuming that `insertIntoDatabase` has not finished processing yet). Since the `queueLimit` is set to `1`, the queue is full now. Thus `BufferedDataSink` will tell the `reader` that it should pause, so that no more lines are read. When the processing is finished, the next buffer in the queue is handed over to `insertIntoDatabase`. This means that we have free space in the queue and `BufferedDataSink` will resume the `reader`. Once the `reader` is closed the remaining (maybe not full) buffer is also queued. After all buffers were processed the callback `onDone` is called.
 
